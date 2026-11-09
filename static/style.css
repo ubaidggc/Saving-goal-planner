@@ -1,0 +1,121 @@
+:root {
+  --ink: #16222e;
+  --paper: #f2f5f7;
+  --surface: #ffffff;
+  --track: #d9e1e7;
+  --line: #c4cfd7;
+  --muted: #56646f;
+  --accent: #0e7c66;
+  --warn: #9a4a06;
+  --danger: #a32121;
+  --radius: 4px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.wrap { max-width: 44rem; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+h1, h2, h3, .num, .brand {
+  font-family: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: 1.9rem; line-height: 1.2; margin: 1.5rem 0 0.5rem; }
+h2 { font-size: 1.2rem; margin: 2.25rem 0 0.75rem; }
+h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 3px solid #1a73e8;
+  outline-offset: 2px;
+}
+.top { padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
+.brand { font-weight: 700; text-decoration: none; color: var(--ink); }
+.lede { color: var(--muted); max-width: 36rem; margin: 0 0 1.5rem; }
+.back { margin: 1.25rem 0 0; }
+
+.flashes { list-style: none; margin: 1rem 0 0; padding: 0; }
+.flashes li { padding: 0.6rem 0.8rem; border-radius: var(--radius); margin-bottom: 0.4rem; background: #fdecec; color: var(--danger); }
+.flashes li.ok { background: #e3f4ee; color: #0b5c4b; }
+
+form.add {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+}
+form.add .wide { grid-column: span 2; }
+form.add button { grid-column: 1 / -1; justify-self: start; }
+label { display: grid; gap: 0.3rem; font-weight: 600; font-size: 0.95rem; }
+input {
+  font: inherit;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #8a99a5;
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  width: 100%;
+}
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+button:hover { background: #0a6552; }
+form.inline { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: end; }
+form.inline label { flex: 1 1 14rem; }
+
+.goals { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.goals li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.goal-name { font-weight: 600; font-size: 1.1rem; color: var(--ink); text-decoration-color: var(--line); }
+.goal-eta { text-align: right; display: grid; justify-items: end; }
+.num { font-size: 2.1rem; font-weight: 700; line-height: 1; }
+.unit { font-size: 0.95rem; font-weight: 600; }
+.meta { color: var(--muted); font-size: 0.92rem; margin: 0.35rem 0 0; }
+.good { color: var(--accent); }
+.warn { color: var(--warn); }
+.empty { color: var(--muted); margin-top: 2rem; }
+
+.track { height: 0.5rem; background: var(--track); border-radius: 2px; overflow: hidden; margin-top: 0.55rem; }
+.fill { height: 100%; background: var(--accent); }
+
+.summary { margin-top: 0.5rem; }
+.big { font-family: "Sora", system-ui, sans-serif; font-size: 1.5rem; font-weight: 700; margin: 0.25rem 0; }
+.big .num { font-size: 3rem; }
+.plan { margin-top: 1.25rem; padding-top: 0.5rem; border-top: 1px solid var(--line); }
+.ideas { padding-left: 1.2rem; max-width: 38rem; }
+.ideas li { margin-bottom: 0.6rem; }
+
+table { border-collapse: collapse; width: 100%; background: var(--surface); }
+th, td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line); }
+th { font-size: 0.9rem; color: var(--muted); }
+
+form.danger { margin-top: 3rem; }
+.link-danger { background: none; color: var(--danger); padding: 0; text-decoration: underline; }
+.link-danger:hover { background: none; }
+
+@media (max-width: 36rem) {
+  form.add { grid-template-columns: 1fr 1fr; }
+  form.add .wide { grid-column: 1 / -1; }
+  .goals li { grid-template-columns: 1fr; }
+  .goal-eta { text-align: left; justify-items: start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

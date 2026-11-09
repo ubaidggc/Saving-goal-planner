@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ goal.name }}{% endblock %}
+{% block content %}
+<p class="back"><a href="{{ url_for('index') }}">All goals</a></p>
+<h1>{{ goal.name }}</h1>
+
+<section class="summary">
+  {% if proj.reached %}
+    <p class="big good">Goal reached</p>
+    <p>You have saved {{ goal.currency }} {{ goal.saved|money }} for a price of {{ goal.price|money }}.</p>
+  {% else %}
+    <p class="big"><span class="num">{{ proj.months_needed }}</span> {{ 'month' if proj.months_needed == 1 else 'months' }} to go</p>
+    <p>At {{ goal.currency }} {{ goal.monthly|money }} a month you reach {{ goal.currency }} {{ goal.price|money }} in {{ proj.target_date|month_year }}.</p>
+  {% endif %}
+  <div class="track" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ proj.progress_pct|round|int }}">
+    <div class="fill" style="width: {{ proj.progress_pct }}%"></div>
+  </div>
+  <p class="meta">{{ goal.currency }} {{ goal.saved|money }} saved, {{ goal.currency }} {{ proj.remaining|money }} to go</p>
+</section>
+
+<section>
+  <h2>Add to your savings</h2>
+  <form method="post" action="{{ url_for('deposit', goal_id=goal.id) }}" class="inline">
+    <label>Amount saved this time
+      <input name="amount" type="number" step="any" min="0" required inputmode="decimal">
+    </label>
+    <button type="submit">Save amount</button>
+  </form>
+</section>
+
+{% if not proj.reached %}
+<section>
+  <h2>Reach it sooner</h2>
+  <form method="get" action="{{ url_for('goal_detail', goal_id=goal.id) }}" class="inline">
+    <label>I want to reach it in (months)
+      <input name="months" type="number" min="1" max="600" required value="{{ months or '' }}">
+    </label>
+    <button type="submit">Show my plan</button>
+  </form>
+
+  {% if plan %}
+  <div class="plan">
+    {% if plan.on_track %}
+      <p class="big good">You are already on track</p>
+      <p>At {{ goal.currency }} {{ goal.monthly|money }} a month you finish within {{ plan.desired_months }} months.</p>
+    {% else %}
+      <p class="big">Save <span class="num warn">{{ goal.currency }} {{ plan.extra_per_month|money }}</span> more each month</p>
+      <p>That makes {{ goal.currency }} {{ plan.required_monthly|money }} a month in total.
+        {% if plan.months_earlier > 0 %}You would finish {{ plan.months_earlier }} {{ 'month' if plan.months_earlier == 1 else 'months' }} earlier.{% endif %}</p>
+      <h3>Ways to find the extra money</h3>
+      <ul class="ideas">
+        {% for idea in plan.ideas %}
+        <li><strong>{{ idea.title }}.</strong> {{ idea.detail }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+
+{% if scenarios %}
+<section>
+  <h2>What if you save more?</h2>
+  <table>
+    <thead><tr><th scope="col">Extra</th><th scope="col">Monthly</th><th scope="col">Months</th><th scope="col">Done by</th></tr></thead>
+    <tbody>
+      {% for s in scenarios %}
+      <tr><td>+{{ s.extra_pct }}%</td><td>{{ goal.currency }} {{ s.monthly|money }}</td><td>{{ s.months_needed }}</td><td>{{ s.target_date|month_year }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endif %}
+
+<form method="post" action="{{ url_for('delete_goal', goal_id=goal.id) }}" class="danger" onsubmit="return confirm('Delete this goal?');">
+  <button type="submit" class="link-danger">Delete goal</button>
+</form>
+{% endblock %}

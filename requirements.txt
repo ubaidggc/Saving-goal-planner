@@ -1,0 +1,7 @@
+Flask>=3.0
+Flask-SQLAlchemy>=3.1
+gunicorn>=22.0
+pytest>=8.0
+# For RDS later, add the driver for your engine:
+# PyMySQL>=1.1        (MySQL / MariaDB)
+# psycopg2-binary>=2.9 (PostgreSQL)

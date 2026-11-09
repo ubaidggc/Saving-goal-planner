@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>What are you saving for?</h1>
+<p class="lede">Add a house, a laptop or anything else you want to buy. You will see how many months it takes at your monthly saving.</p>
+
+<form method="post" action="{{ url_for('create_goal') }}" class="add">
+  <label class="wide">Goal
+    <input name="name" required maxlength="100" placeholder="House down payment, laptop, bike" value="{{ form.get('name', '') }}">
+  </label>
+  <label class="narrow">Currency
+    <input name="currency" maxlength="5" value="{{ form.get('currency', 'PKR') }}">
+  </label>
+  <label>Price
+    <input name="price" type="number" step="any" min="0" required inputmode="decimal" value="{{ form.get('price', '') }}">
+  </label>
+  <label>Already saved
+    <input name="saved" type="number" step="any" min="0" inputmode="decimal" value="{{ form.get('saved', '0') }}">
+  </label>
+  <label>Monthly saving
+    <input name="monthly" type="number" step="any" min="0" required inputmode="decimal" value="{{ form.get('monthly', '') }}">
+  </label>
+  <button type="submit">Add goal</button>
+</form>
+
+{% if rows %}
+<h2>Your goals</h2>
+<ul class="goals">
+  {% for goal, proj in rows %}
+  <li>
+    <div class="goal-main">
+      <a class="goal-name" href="{{ url_for('goal_detail', goal_id=goal.id) }}">{{ goal.name }}</a>
+      <div class="track" role="progressbar" aria-label="Progress for {{ goal.name }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ proj.progress_pct|round|int }}">
+        <div class="fill" style="width: {{ proj.progress_pct }}%"></div>
+      </div>
+      <p class="meta">{{ goal.currency }} {{ goal.saved|money }} of {{ goal.price|money }} saved</p>
+    </div>
+    <div class="goal-eta">
+      {% if proj.reached %}
+        <span class="num good">Reached</span>
+      {% else %}
+        <span class="num">{{ proj.months_needed }}</span>
+        <span class="unit">{{ 'month' if proj.months_needed == 1 else 'months' }}</span>
+        <span class="meta">{{ proj.target_date|month_year }}</span>
+      {% endif %}
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No goals yet. Add your first one above.</p>
+{% endif %}
+{% endblock %}
